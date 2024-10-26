@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Data
-@Table(name = "pedido")
+@Table(name = "pedidos")
 @Entity
 public class Pedido {
     @Id
@@ -17,7 +17,7 @@ public class Pedido {
 
     @ManyToMany
     @JoinTable(
-            name = "pedido_produto",
+            name = "pedidos_produtos",
             joinColumns = @JoinColumn(name = "pedido_id"),
             inverseJoinColumns = @JoinColumn(name = "produto_id")
     )

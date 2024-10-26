@@ -4,7 +4,7 @@ import lombok.Data;
 import jakarta.persistence.*;
 
 @Data
-@Table(name = "cliente", uniqueConstraints = @UniqueConstraint(columnNames = "cpf"))
+@Table(name = "clientes", uniqueConstraints = @UniqueConstraint(columnNames = "cpf"))
 @Entity
 public class Cliente {
     @Id

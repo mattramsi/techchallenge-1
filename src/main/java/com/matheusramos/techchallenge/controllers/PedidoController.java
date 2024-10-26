@@ -22,10 +22,10 @@ public class PedidoController {
     private final PedidoService pedidoService;
     private final ProdutoService produtoService;
 
-    @Autowired // Injeção automática do serviço
+    @Autowired
     public PedidoController(PedidoService pedidoService, ProdutoService produtoService) {
         this.pedidoService = pedidoService;
-        this.produtoService = produtoService; // Agora temos uma referência ao ProdutoService
+        this.produtoService = produtoService;
     }
     @PostMapping("/checkout")
     public ResponseEntity<Pedido> checkout(@RequestBody PedidoDTO pedidoDTO) {
@@ -33,28 +33,19 @@ public class PedidoController {
         pedido.setClienteId(pedidoDTO.getClienteId());
         pedido.setTotal(pedidoDTO.getTotal());
 
-        // Mapeia cada DTO para Produto
         List<Produto> produtos = pedidoDTO.getProdutos().stream()
                 .map(dto -> {
-                    // Busca o produto como um Optional
                     Optional<Produto> optionalProduto = produtoService.buscarPorId(dto.getProdutoId());
 
-                    // Verifica se o produto existe
                     Produto produto = optionalProduto.orElseThrow(() ->
                             new ResourceNotFoundException("Produto não encontrado: " + dto.getProdutoId())
                     );
-
-                    // Aqui você pode definir a quantidade como desejar, mas precisa ajustar a lógica
-                    // Adicione um método setQuantidade em Produto, caso necessário
-                    // Exemplo: produto.setQuantidade(dto.getQuantidade() == 0 ? 1 : dto.getQuantidade());
 
                     return produto;
                 })
                 .collect(Collectors.toList());
 
         pedido.setProdutos(produtos);
-
-        // Salva o pedido usando o serviço
         return ResponseEntity.ok(pedidoService.checkout(pedido));
     }
 
